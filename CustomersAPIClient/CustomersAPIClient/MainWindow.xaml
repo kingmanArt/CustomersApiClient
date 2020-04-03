@@ -1,0 +1,133 @@
+﻿<Window x:Class="CustomersAPIClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomersAPIClient"
+        mc:Ignorable="d"
+        Title="MainWindow"  WindowState="Maximized">
+
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1.3*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <ComboBox  Grid.Row="0" Grid.Column="1"  
+                   SelectedItem="{Binding SelectedDataSource, UpdateSourceTrigger=PropertyChanged}"
+                   ItemsSource="{Binding LanguagesCombobox}" 
+                   SelectedIndex="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right"
+                   MinWidth="70"/>
+
+
+
+        <TextBox Text="{Binding Path= FastData, UpdateSourceTrigger=PropertyChanged}" 
+                 Grid.Column="0" 
+                 HorizontalAlignment="Right" 
+                 VerticalAlignment="Center"
+                 MinWidth="80">
+            <TextBox.Style>
+            <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                <Style.Resources>
+                    <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                        <VisualBrush.Visual>
+                            <Label Content="Search" Foreground="LightGray" />
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Style.Resources>
+                <Style.Triggers>
+                    <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                        <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                    </Trigger>
+                    <Trigger Property="Text" Value="{x:Null}">
+                        <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsKeyboardFocused" Value="True">
+                        <Setter Property="Background" Value="White" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            </TextBox.Style>
+        </TextBox>
+
+        <Label Content="Customers" 
+               Grid.Row="0" 
+               HorizontalAlignment="Left" 
+               VerticalAlignment="Top" />
+        <local:CustomDataGrid x:Name="persongrid" 
+                              Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              HorizontalAlignment="Stretch" 
+                              VerticalAlignment="Stretch"
+                              AlternatingRowBackground="Gray"
+                              
+                              CanUserDeleteRows="False"
+                              CanUserAddRows="False"
+                              SelectionMode="Extended"
+                              SelectedItem="{Binding SelectePerson,UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItemsList="{Binding TestSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding FiltredPersons, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="3" Margin="0,0,-0.4,-0.4">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Adress No" Width="*" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Company" Width="*"  Binding="{Binding Cpny, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Greeting" Width="*" Binding="{Binding GrTxtEdit, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Title" Width="*" Binding="{Binding Title}"/>
+                <DataGridTextColumn Header="First Name" Width="*" Binding="{Binding Fname}"/>
+                <DataGridTextColumn Header="Last Name" Width="*" Binding="{Binding Lname}"/>
+                <DataGridTextColumn Header="Street" Width="*" Binding="{Binding Street}"/>
+                <DataGridTextColumn Header="Country" Width="*" Binding="{Binding ConTxtEdit, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Postal Code" Width="*" Binding="{Binding Zip}"/>
+                <DataGridTextColumn Header="City" Width="*" Binding="{Binding City}"/>
+                <DataGridTextColumn Header="Phone" Width="*" Binding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Date of Birth" Width="*" Binding="{Binding DateOfBirth}"/>
+                <DataGridTextColumn Header="Registration" Width="*" Binding="{Binding FirstContact}"/>
+            </DataGrid.Columns>
+        </local:CustomDataGrid>
+
+        <ToolBarTray HorizontalAlignment="Right" 
+                         Background="White" 
+                         VerticalAlignment="Top" 
+                         Grid.Column="2"
+                         Grid.Row="0"
+                         Height="45">
+            <ToolBar Background="White" 
+                     Margin="0,0,20,465">
+                <Button ToolTip="New"
+                        Command="{Binding AddProfile}">
+                    <Image Source="Images/New.jpg" 
+                           Width="20" 
+                           Height="30" />
+                </Button>
+                <Button ToolTip="Edit"
+                        Command ="{Binding EditCommand}">
+                    <Image Source="Images/Edit.png"
+                           Width="20"/>
+                </Button>
+                <Button ToolTip="Refresh" 
+                        Command="{Binding RefCommand}" >
+                    <Image Source="Images/refresh.png"
+                           Width="20"/>
+                </Button>
+                <Button ToolTip="Delete" 
+                        Command="{Binding DelCommand}"
+                        IsEnabled="{Binding ButtonOfforOn ,UpdateSourceTrigger=PropertyChanged}" IsDefault="False">
+                    <Image Source="Images/Delete.png" 
+                           Width="20"/>
+                </Button>
+
+            </ToolBar>
+
+        </ToolBarTray>
+
+    </Grid>
+</Window>
