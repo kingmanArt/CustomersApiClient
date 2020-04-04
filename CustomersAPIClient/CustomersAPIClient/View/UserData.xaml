@@ -351,7 +351,7 @@
                 Grid.Row="2"  
                 Background="Blue" 
                 Foreground="White" 
-                Command="{Binding AddPerson}"/>
+                Command="{Binding SaveCommand}"/>
         <Button Content="Cansel"
                 Margin="149.2,71.4,80.6,14" 
                 Grid.Column="1"

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CustomersAPIClient
 {
-    public interface IWindowService
+     interface IWindowService
     {
-        void OpenProfileWindow(NewPersonView vm);
+        void OpenProfileWindow(NewEditViewModel vm);
     }
 }

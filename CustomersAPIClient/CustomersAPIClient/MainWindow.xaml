@@ -88,7 +88,7 @@
                 <DataGridTextColumn Header="Country" Width="*" Binding="{Binding ConTxtEdit, UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Postal Code" Width="*" Binding="{Binding Zip}"/>
                 <DataGridTextColumn Header="City" Width="*" Binding="{Binding City}"/>
-                <DataGridTextColumn Header="Phone" Width="*" Binding="{Binding Phone}"/>
+                <DataGridTextColumn Header="Phone" Width="*" Binding="{Binding Test,  UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Date of Birth" Width="*" Binding="{Binding DateOfBirth}"/>
                 <DataGridTextColumn Header="Registration" Width="*" Binding="{Binding FirstContact}"/>
             </DataGrid.Columns>
@@ -103,13 +103,14 @@
             <ToolBar Background="White" 
                      Margin="0,0,20,465">
                 <Button ToolTip="New"
-                        Command="{Binding AddProfile}">
+                        Command="{Binding NewCommand}">
                     <Image Source="Images/New.jpg" 
                            Width="20" 
                            Height="30" />
                 </Button>
                 <Button ToolTip="Edit"
-                        Command ="{Binding EditCommand}">
+                        Command ="{Binding EditCommand}"
+                        IsEnabled="{Binding EditButtonOfforOn ,UpdateSourceTrigger=PropertyChanged}" IsDefault="False" >
                     <Image Source="Images/Edit.png"
                            Width="20"/>
                 </Button>
@@ -120,7 +121,7 @@
                 </Button>
                 <Button ToolTip="Delete" 
                         Command="{Binding DelCommand}"
-                        IsEnabled="{Binding ButtonOfforOn ,UpdateSourceTrigger=PropertyChanged}" IsDefault="False">
+                        IsEnabled="{Binding DeleteButtonOfforOn ,UpdateSourceTrigger=PropertyChanged}" IsDefault="False">
                     <Image Source="Images/Delete.png" 
                            Width="20"/>
                 </Button>

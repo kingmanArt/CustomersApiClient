@@ -36,6 +36,8 @@ namespace CustomersAPIClient
 
         public string GrTxtEdit { get; set; }
 
+
+
         public string Zip { get; set; }
         public string City { get; set; }
         public DateTime? DateOfBirth { get; set; }
@@ -46,13 +48,18 @@ namespace CustomersAPIClient
 
         public ObservableCollection<PersonContact> _contacts;
 
-        public  ObservableCollection<PersonContact> PersonContact
+        public ICollection<PersonContact> PersonContacts { get; set; }
+        public string test;
+        public string Test
         {
-            get => _contacts;
+            get { return test; }
             set
             {
-                _contacts = value;
-                OnPropertyChanged(nameof(PersonContact));
+                test = value;
+
+                OnPropertyChanged("SelectedDataSource");
+
+
             }
         }
 

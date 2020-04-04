@@ -21,7 +21,7 @@ using Microsoft.VisualStudio.PlatformUI;
 
 namespace CustomersAPIClient
 {
-    class ViewModel : INotifyPropertyChanged
+    class MainViewModel : INotifyPropertyChanged
     {
         private Person selectedPerson;
         public ObservableCollection<Person> _persons;
@@ -76,11 +76,53 @@ namespace CustomersAPIClient
             }
 
         }
-       
 
+        private RelayCommand newCommand;
         private RelayCommand delCommand;
         private RelayCommand refCommand;
         private RelayCommand editCommand;
+        public RelayCommand EditCommand
+        {
+            get
+            {
+                return editCommand ??
+                  (editCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          view.windowType = 2;
+                          view.SelectedPers = SelectePerson;
+                          _windowService.OpenProfileWindow(new NewEditViewModel());
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
+        public RelayCommand NewCommand
+        {
+            get
+            {
+                return newCommand ??
+                  (newCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          view.windowType = 1;
+                          _windowService.OpenProfileWindow(new NewEditViewModel());
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+
+                  }));
+            }
+        }
         public RelayCommand DelCommand
         {
             get
@@ -121,8 +163,29 @@ namespace CustomersAPIClient
                   }));
             }
         }
-        
+        public RelayCommand RefCommand
+        {
+            get
+            {
+                return refCommand ??
+                  (refCommand = new RelayCommand(obj =>
+                  {
 
+                      try
+                      {
+                          GetAll();
+                          OnPropertyChanged("Refresh");
+                          Refresh();
+                          MessageBox.Show("Refreshed");
+                          
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
         public void FastSearch()
         {
             FiltredPersons.Clear();
@@ -141,6 +204,13 @@ namespace CustomersAPIClient
                     foreach (var item in persons)
                     {
                         FiltredPersons.Add(item);
+                        foreach (var item1 in item.PersonContacts)
+                    {
+                        if (item1.PersonContactId == 1 && item1.ContactTypeId == 1)
+                        {
+                            item.Test = item1.Txt;
+                        }
+                    }
                     }
                     DataSourceFilter();
                     OnPropertyChanged("sd");
@@ -151,60 +221,8 @@ namespace CustomersAPIClient
                     MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
                 }
             }
-            if(FastData == "")
-            {
-                //foreach (var item in Persons)
-                //{
-                //    FiltredPersons.Add(item);
-                //}
-                OnPropertyChanged("sd");
-            }
+
         }
-  
-        public RelayCommand EditCommand
-        {
-            get
-            {
-                return editCommand ??
-                  (editCommand = new RelayCommand(obj =>
-                  {
-
-                      try
-                      {
-                      }
-                      catch (Exception e)
-                      {
-                          MessageBox.Show(e.Message);
-                      }
-
-                  }));
-            }
-        }
-
-        public RelayCommand RefCommand
-        {
-            get
-            {
-                return refCommand ??
-                  (refCommand = new RelayCommand(obj =>
-                  {
-
-                      try
-                      {
-                          Refresh();
-                          OnPropertyChanged("Refresh");
-                          GetAll();
-                          MessageBox.Show("Refreshed");
-                          
-                      }
-                      catch (Exception e)
-                      {
-                          MessageBox.Show(e.Message);
-                      }
-                  }));
-            }
-        }
-       
         private void GetAll()
         {
             HttpClient client = new HttpClient();
@@ -219,33 +237,12 @@ namespace CustomersAPIClient
             if (response.IsSuccessStatusCode && response2.IsSuccessStatusCode)
             {
                 var persons = response.Content.ReadAsAsync<IEnumerable<Person>>().Result;
-                
-                
                 foreach (var item in persons)
                 {
                     Persons.Add(item);
                     FiltredPersons.Add(item);
                 }
-               
-                //var contacts = response2.Content.ReadAsAsync<IEnumerable<PersonContact>>().Result;
-                //{
-                //    foreach (var item in contacts)
-                //    {
-                //        foreach (var item1 in Persons)
-                //        {
-                //            item1.PersonContact = new ObservableCollection<PersonContact>();
-                //            if (item1.Id == item.PersonId)
-                //            {
-                //                item1.PersonContact.Add(item);
-                //            }
-                //    }
-                //    }
-                    
-                //}
-                //MessageBox.Show(Persons[5].Phone);
             }
-           
-
             else
             {
                 MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
@@ -264,43 +261,47 @@ namespace CustomersAPIClient
                     return true;
                 };
         }
-        NewPersonView view = NewPersonView.getInstance();
-        
-        public int test = 4;
-        public int Test
-        {
-            get => test;
-            set
-            {
-                test = value;
-                OnPropertyChanged(nameof(Test));
-            }
-        }
-        public ViewModel(IWindowService windowService)
-        {
+        NewEditViewModel view = NewEditViewModel.getInstance("da");
 
+        public MainViewModel(IWindowService windowService)
+        {
+            
+            view.windowType = 1;
             NEVER_EAT_POISON_Disable_CertificateValidation();
             FiltredPersons = new ObservableCollection<Person>();
             Persons = new ObservableCollection<Person>();
             BindingOperations.EnableCollectionSynchronization(Persons, _lock);
             //Persons = GetProducts();
-
             GetAll();
-            if (_selectedDataSource != null)
+            GenerateId();
+            foreach (var item in FiltredPersons)
             {
-                ButtonOfforOn = true;
+                    foreach (var item1 in item.PersonContacts)
+                    {
+                    if( item1.ContactTypeId == 1)
+                    {
+                        item.Test = item1.Txt;
+                        break;
+                    }
+                    }
             }
-            _windowService = windowService;
-            AddProfile = new DelegateCommand(() =>
-            {
-                view.Test = SelectePerson.Id;
-                _windowService.OpenProfileWindow(new NewPersonView());
-            });
-
-
-
+                _windowService = windowService;
+           
         }
+      
+        public void GenerateId()
+        {
+            int i = 0;
+            foreach (var item in Persons)
+            {
+                if (i < item.Id)
+                {
+                    i = item.Id;
 
+                }
+            }
+            view.id = i + 1;
+        }
         public void Refresh()
         {
             foreach (var item in Persons)
@@ -322,19 +323,27 @@ namespace CustomersAPIClient
 
             }
         }
-        public bool buttonEvent;
-        public bool ButtonOfforOn
+        public bool deletebuttonEvent;
+        public bool DeleteButtonOfforOn
         {
-            get { return buttonEvent; }
+            get { return deletebuttonEvent; }
             set
             {
-                buttonEvent = value;
-                OnPropertyChanged("SelectedDataSource");
-                
-
+                deletebuttonEvent = value;
+                OnPropertyChanged("DeleteButtonOfforOn");
             }
         }
 
+        public bool editbuttonEvent;
+        public bool EditButtonOfforOn
+        {
+            get { return editbuttonEvent; }
+            set
+            {
+                editbuttonEvent = value;
+                OnPropertyChanged("EditButtonOfforOn");
+            }
+        }
         private void DataSourceFilter()
         {
             switch (SelectedDataSource)
@@ -425,6 +434,7 @@ namespace CustomersAPIClient
             }
         }
 
+        
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
@@ -453,7 +463,25 @@ namespace CustomersAPIClient
             {
                 _selectedModels = value;
                 OnPropertyChanged("TestSelected");
-                
+
+                if (TestSelected.Count == 0)
+                {
+                    DeleteButtonOfforOn = false;
+                    EditButtonOfforOn = false;
+
+                }
+                if (TestSelected.Count > 0)
+                {
+                    DeleteButtonOfforOn = true;
+                }
+                if (TestSelected.Count > 1)
+                {
+                    EditButtonOfforOn = false;
+                }
+                if (TestSelected.Count == 1)
+                {
+                    EditButtonOfforOn = true;
+                }
             }
              
         }

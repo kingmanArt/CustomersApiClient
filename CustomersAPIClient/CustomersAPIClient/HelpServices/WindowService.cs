@@ -4,9 +4,9 @@
 namespace CustomersAPIClient
 {
 
-    public class WindowService : IWindowService
+     class WindowService : IWindowService
     {
-        public void OpenProfileWindow(NewPersonView vm)
+        public void OpenProfileWindow(NewEditViewModel vm)
         {
             UserData win = new UserData();
             win.DataContext = vm;

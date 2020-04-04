@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\waywa\Desktop\CustomersAPIClient\CustomersAPIClient\obj\Debug\
+D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\
 CustomersAPIClient
 none
 false
 DEBUG;TRACE
-C:\Users\waywa\Desktop\CustomersAPIClient\CustomersAPIClient\App.xaml
-21700703090
+D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\App.xaml
+2977375824
 
-171438074989
-151163937953
-MainWindow.xaml;UserData.xaml;
+17-2013882200
+151956705242
+MainWindow.xaml;View\UserData.xaml;
 
-True
+False
 

@@ -34,7 +34,7 @@ namespace CustomersAPIClient
         {
             
             InitializeComponent();
-            DataContext = new ViewModel(new WindowService());
+            DataContext = new MainViewModel(new WindowService());
 
         }
        
