@@ -64,24 +64,7 @@ namespace CustomersAPIClient
         }
 
         public string Notes { get; set; }
-        //private string _phones;
-        //public string Phone
-        //{
-        //    get 
-        //    {
-        //        var kek = PersonContact.Select(x => x.Txt).FirstOrDefault();
-        //        return kek;
-        //    }
-        //    set
-        //    {
-        //        _phones = value;
-        //        OnPropertyChanged(nameof(Phone));
-        //    }
-        //}
-
-
-
-
+     
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {

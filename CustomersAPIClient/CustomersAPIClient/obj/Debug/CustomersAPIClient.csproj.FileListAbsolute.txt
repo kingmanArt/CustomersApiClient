@@ -241,12 +241,10 @@ D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\bin\Debug\ru\StreamJ
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\bin\Debug\tr\StreamJsonRpc.resources.dll
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\bin\Debug\zh-Hans\StreamJsonRpc.resources.dll
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\bin\Debug\zh-Hant\StreamJsonRpc.resources.dll
-D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\View\UserData.g.cs
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\App.g.cs
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\GeneratedInternalTypeHelper.g.cs
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\CustomersAPIClient_MarkupCompile.cache
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\CustomersAPIClient_MarkupCompile.lref
-D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\View\UserData.baml
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\CustomersAPIClient.g.resources
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\CustomersAPIClient.Properties.Resources.resources
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\CustomersAPIClient.csproj.GenerateResource.cache
@@ -254,3 +252,7 @@ D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\CustomersA
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\CustomersAPIClient.csproj.CopyComplete
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\MainWindow.g.cs
 D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\MainWindow.baml
+D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\View\NewEditDialog.g.cs
+D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\View\NewEditDialog.baml
+D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\ContactsNewEdit.g.cs
+D:\CustomersApiClient\CustomersAPIClient\CustomersAPIClient\obj\Debug\ContactsNewEdit.baml

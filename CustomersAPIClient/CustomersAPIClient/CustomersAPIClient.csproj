@@ -191,17 +191,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ContactsNewEdit.xaml.cs">
+      <DependentUpon>ContactsNewEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomDataGrid2.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="HelpServices\CustomDataGrid.cs" />
     <Compile Include="Models\Greeting.cs" />
     <Compile Include="HelpServices\IWindowService.cs" />
-    <Compile Include="ViewModels\NewEditViewModel.cs" />
+    <Compile Include="ContactNewEditModel.cs" />
+    <Compile Include="NewEditViewModel.cs" />
     <Compile Include="HelpServices\WindowService.cs" />
     <Compile Include="Models\PersonContact.cs" />
     <Compile Include="HelpServices\RelayCommand.cs" />
-    <Compile Include="View\UserData.xaml.cs">
-      <DependentUpon>UserData.xaml</DependentUpon>
+    <Compile Include="View\NewEditDialog.xaml.cs">
+      <DependentUpon>NewEditDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="ContactsNewEdit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -214,14 +223,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\UserData.xaml">
+    <Page Include="View\NewEditDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Person.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="MainViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -256,6 +265,20 @@
   <ItemGroup>
     <Resource Include="Images\Delete.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="View\Images\Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\New.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

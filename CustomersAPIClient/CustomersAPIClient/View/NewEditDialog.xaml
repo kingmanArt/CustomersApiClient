@@ -67,7 +67,7 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        
+
         <TextBox  Grid.Column="0" 
                   Grid.Row="1" 
                   Margin="10,122.4,9.8,128.6" 
@@ -203,9 +203,9 @@
                     </Style.Triggers>
                 </Style>
             </TextBox.Style>
-            
+
         </TextBox>
-           
+
         <Label Content="Work"
                Margin="10,157.4,29.8,82.6" 
                Grid.Column="0" 
@@ -283,9 +283,9 @@
                FontSize="17"
                FontWeight="Bold"/>
 
-        <TextBox  Margin="20,45.4,29.8,40"
-                  Grid.Column="0"
-                  Grid.Row="2"
+        <TextBox  Margin="10.2,198.4,39.6,52.6"
+                  Grid.Column="1"
+                  Grid.Row="1"
                   FontFamily="Arial"
                   FontSize="14"
                   Foreground="Gray" 
@@ -313,9 +313,9 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-        <TextBox  Margin="20,75.4,29.8,10"
-                  Grid.Column="0" 
-                  Grid.Row="2"
+        <TextBox  Margin="10.2,240.4,39.6,10.6"
+                  Grid.Column="1" 
+                  Grid.Row="1"
                   FontFamily="Arial" 
                   FontSize="14"
                   Foreground="Gray"
@@ -343,7 +343,27 @@
                 </Style>
             </TextBox.Style>
         </TextBox>
-            
+        <local:CustomDataGrid2 x:Name="persongrid2" 
+                              Grid.Row="2"
+                              Grid.Column="0"
+                              AutoGenerateColumns="False"
+                              HorizontalAlignment="Left" 
+                              VerticalAlignment="Top"
+                              AlternatingRowBackground="Gray"
+                              
+                              CanUserDeleteRows="False"
+                              CanUserAddRows="False"
+                              SelectionMode="Extended"
+                             SelectedItem="{Binding SelecteContact,UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItemsList2="{Binding SelectedConttacts, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding PersonContacts, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"  
+                               Width="297" Margin="0,37.4,0,0"  
+                               Height="73">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Phone" Width="*"  Binding="{Binding Txt, UpdateSourceTrigger=PropertyChanged}"/>
+
+            </DataGrid.Columns>
+        </local:CustomDataGrid2>
 
         <Button Content="Save"  
                 Margin="221.2,71.4,9.6,14"
@@ -358,6 +378,39 @@
                 Grid.Row="2"
                 Background="Red" 
                 Foreground="White"
-                Command="{Binding AddPerson}"/>
+                Command="{Binding CloseCommand}"/>
+
+        <ToolBarTray HorizontalAlignment="Right" 
+                         Background="White" 
+                         VerticalAlignment="Top" 
+                         Grid.Column="0"
+                         Grid.Row="3"
+                         Height="37">
+            <ToolBar Background="White" 
+                     Margin="0,0,20,464.6" Width="167">
+                <Button ToolTip="New"
+                        Command="{Binding OpenContactCommand ,UpdateSourceTrigger=PropertyChanged}">
+                    <Image Source="Images/New.jpg" 
+                           Width="20" 
+                           Height="30" />
+                </Button>
+                <Button ToolTip="Edit"
+                        Command ="{Binding EditContactCommand}"
+                         IsDefault="True" >
+                    <Image Source="Images/Edit.png"
+                           Width="20"/>
+                </Button>
+
+                <Button ToolTip="Delete" 
+                        Command="{Binding DeleteContactCommand}"
+                         IsDefault="True">
+                    <Image Source="Images/Delete.png" 
+                           Width="20"/>
+                </Button>
+
+            </ToolBar>
+
+        </ToolBarTray>
+
     </Grid>
 </Window>

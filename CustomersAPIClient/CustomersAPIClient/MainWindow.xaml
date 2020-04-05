@@ -29,7 +29,7 @@
                    HorizontalAlignment="Right"
                    MinWidth="70"/>
 
-
+        
 
         <TextBox Text="{Binding Path= FastData, UpdateSourceTrigger=PropertyChanged}" 
                  Grid.Column="0" 
@@ -37,23 +37,33 @@
                  VerticalAlignment="Center"
                  MinWidth="80">
             <TextBox.Style>
-            <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+            <Style TargetType="TextBox"
+                   xmlns:sys="clr-namespace:System;assembly=mscorlib">
                 <Style.Resources>
-                    <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                    <VisualBrush x:Key="CueBannerBrush" 
+                                 AlignmentX="Left" 
+                                 AlignmentY="Center" Stretch="None">
                         <VisualBrush.Visual>
-                            <Label Content="Search" Foreground="LightGray" />
+                            <Label Content="Search" 
+                                   Foreground="LightGray" />
                         </VisualBrush.Visual>
                     </VisualBrush>
                 </Style.Resources>
                 <Style.Triggers>
-                    <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                        <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                    <Trigger Property="Text" 
+                             Value="{x:Static sys:String.Empty}">
+                        <Setter Property="Background" 
+                                Value="{StaticResource CueBannerBrush}" />
                     </Trigger>
-                    <Trigger Property="Text" Value="{x:Null}">
-                        <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                    <Trigger Property="Text" 
+                             Value="{x:Null}">
+                        <Setter Property="Background"
+                                Value="{StaticResource CueBannerBrush}" />
                     </Trigger>
-                    <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Property="Background" Value="White" />
+                    <Trigger Property="IsKeyboardFocused" 
+                             Value="True">
+                        <Setter Property="Background" 
+                                Value="White" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -78,19 +88,45 @@
                               SelectedItemsList="{Binding TestSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               ItemsSource="{Binding FiltredPersons, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="3" Margin="0,0,-0.4,-0.4">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Adress No" Width="*" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Company" Width="*"  Binding="{Binding Cpny, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Greeting" Width="*" Binding="{Binding GrTxtEdit, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Title" Width="*" Binding="{Binding Title}"/>
-                <DataGridTextColumn Header="First Name" Width="*" Binding="{Binding Fname}"/>
-                <DataGridTextColumn Header="Last Name" Width="*" Binding="{Binding Lname}"/>
-                <DataGridTextColumn Header="Street" Width="*" Binding="{Binding Street}"/>
-                <DataGridTextColumn Header="Country" Width="*" Binding="{Binding ConTxtEdit, UpdateSourceTrigger=PropertyChanged}"/>
-                <DataGridTextColumn Header="Postal Code" Width="*" Binding="{Binding Zip}"/>
-                <DataGridTextColumn Header="City" Width="*" Binding="{Binding City}"/>
-                <DataGridTextColumn Header="Phone" Width="*" Binding="{Binding Test,  UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Date of Birth" Width="*" Binding="{Binding DateOfBirth}"/>
-                <DataGridTextColumn Header="Registration" Width="*" Binding="{Binding FirstContact}"/>
+                <DataGridTextColumn Header="Adress No"
+                                    Width="*" 
+                                    Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Company" 
+                                    Width="*" 
+                                    Binding="{Binding Cpny, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Greeting" 
+                                    Width="*" 
+                                    Binding="{Binding GrTxtEdit, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Title" 
+                                    Width="*" 
+                                    Binding="{Binding Title}"/>
+                <DataGridTextColumn Header="First Name"
+                                    Width="*"
+                                    Binding="{Binding Fname}"/>
+                <DataGridTextColumn Header="Last Name"
+                                    Width="*" 
+                                    Binding="{Binding Lname}"/>
+                <DataGridTextColumn Header="Street"
+                                    Width="*" 
+                                    Binding="{Binding Street}"/>
+                <DataGridTextColumn Header="Country"
+                                    Width="*"
+                                    Binding="{Binding ConTxtEdit, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Postal Code" 
+                                    Width="*"
+                                    Binding="{Binding Zip}"/>
+                <DataGridTextColumn Header="City"
+                                    Width="*" 
+                                    Binding="{Binding City}"/>
+                <DataGridTextColumn Header="Phone" 
+                                    Width="*"
+                                    Binding="{Binding Test,  UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Date of Birth"
+                                    Width="*" 
+                                    Binding="{Binding DateOfBirth}"/>
+                <DataGridTextColumn Header="Registration"
+                                    Width="*" 
+                                    Binding="{Binding FirstContact}"/>
             </DataGrid.Columns>
         </local:CustomDataGrid>
 

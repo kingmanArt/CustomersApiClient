@@ -14,12 +14,14 @@ using System.Windows.Input;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Net;
+using CustomersAPIClient.ViewModels;
+using System.Collections;
 
 namespace CustomersAPIClient
 {
      class NewEditViewModel
     {
-        
+
         private static NewEditViewModel personS;
         public static NewEditViewModel getInstance(string name)
         {
@@ -27,6 +29,9 @@ namespace CustomersAPIClient
                 personS = new NewEditViewModel(name);
             return personS;
         }
+
+       
+
         static void NEVER_EAT_POISON_Disable_CertificateValidation()
         {
 
@@ -41,9 +46,9 @@ namespace CustomersAPIClient
                 };
         }
         public NewEditViewModel(string name) { }
+        public NewEditViewModel() { }
         public void GetInfo()
         {
-
             personS.SelectedPers.CountryCode = countryCode;
             personS.SelectedPers.GreetingId = ifGrid;
             personS.SelectedPers.Lname = Lname;
@@ -53,18 +58,97 @@ namespace CustomersAPIClient
             personS.SelectedPers.Zip = Postcode;
             personS.SelectedPers.Cpny = Company;
             personS.SelectedPers.Title = Title;
-            
+        }
+        public ObservableCollection<PersonContact> _personContacts;
+        public ObservableCollection<PersonContact> PersonContacts
+        {
+            get => _personContacts;
+            set
+            {
+                _personContacts = value;
+                OnPropertyChanged(nameof(PersonContacts));
+            }
+        }
+        public IEnumerable<PersonContact> Model { get { return PersonContacts; } }
 
+        private IList _selectedModels = new ArrayList();
+        // створюю лист з виділеними персонами для видалення і тд..
+        public IList SelectedConttacts
+        {
+            get { return _selectedModels; }
+            set
+            {
+                _selectedModels = value;
+                OnPropertyChanged("SelectedConttacts");
+
+                //if (SelectedConttacts.Count == 0)
+                //{
+                //    DeleteButtonOfforOn = false;
+                //    EditButtonOfforOn = false;
+
+                //}
+                //if (SelectedConttacts.Count > 0)
+                //{
+                //    DeleteButtonOfforOn = true;
+                //}
+                //if (SelectedConttacts.Count > 1)
+                //{
+                //    EditButtonOfforOn = false;
+                //}
+                //if (SelectedConttacts.Count == 1)
+                //{
+                //    EditButtonOfforOn = true;
+                //}
+            }
 
         }
-        public NewEditViewModel()
+        private PersonContact selectedContact;
+
+        public PersonContact SelecteContact
         {
+            get => selectedContact;
+            set
+            {
+                if (!SetValue(ref selectedContact, value)) return;
+
+                selectedContact = value;
+                OnPropertyChanged(nameof(SelecteContact));
+
+
+            }
+        }
+        public bool deletebuttonEvent;
+        public bool DeleteButtonOfforOn
+        {
+            get { return deletebuttonEvent; }
+            set
+            {
+                deletebuttonEvent = value;
+                OnPropertyChanged("DeleteButtonOfforOn");
+            }
+        }
+
+        public bool editbuttonEvent;
+        public bool EditButtonOfforOn
+        {
+            get { return editbuttonEvent; }
+            set
+            {
+                editbuttonEvent = value;
+                OnPropertyChanged("EditButtonOfforOn");
+            }
+        }
+        public NewEditViewModel(int i)
+        {
+           
             var editPerson = new Person();
             var addPerson = new Person() ;
-            var persCont = new PersonContact() { Txt = "23423", ContactTypeId = 1, PersonId = 2, PersonContactId = 324361, Active = 1 };
+            GetSomeInfo();
+        // Використовую свич-кейс для вибору, яке вікно буде завантажено(1 це додати - 2 - це едитнути)
             switch (personS.windowType)
             {
                 case 1 :
+                    
                     saveCommand = new RelayCommand(obj =>
                     {
 
@@ -72,8 +156,8 @@ namespace CustomersAPIClient
                         {
                             GetGreeting();
                            
-                            addPerson = new Person() { Id = personS.id, Fname = FName, Lname = Lname, GreetingId = ifGrid, CountryCode = countryCode, City = City, Street = Street, Zip = Postcode, Cpny = Company, Title = Title };
-                            if (ifGrid == 0 || countryCode == null || City == "")
+                            addPerson = new Person() { Id = personS.id, Fname = FName, Lname = Lname, GreetingId = ifGrid, CountryCode = countryCode, City = City, Street = Street, Zip = Postcode, Cpny = Company, Title = Title, FirstContact = DateTime.Now };
+                            if (ifGrid == 0 || countryCode == null || City == null)
                             {
                                 MessageBox.Show("the fields greeting, country, city must be filled");
                             }
@@ -92,8 +176,12 @@ namespace CustomersAPIClient
 
                     break;
                 case 2:
-
-                            WriteEditPersonInfo();
+                    PersonContacts = new ObservableCollection<PersonContact>();
+                    foreach (var item in personS.SelectedPers.PersonContacts)
+                    {
+                        PersonContacts.Add(item);
+                    }
+                    WriteEditPersonInfo();
 
                     saveCommand = new RelayCommand(obj =>
                     {
@@ -102,6 +190,7 @@ namespace CustomersAPIClient
                         {
                             GetGreeting();
                             GetInfo();
+
                             if (ifGrid == 0 || countryCode == "" || City == "")
                             {
                                 MessageBox.Show("the fields greeting, country, city must be filled");
@@ -112,6 +201,7 @@ namespace CustomersAPIClient
                                 MessageBox.Show("Person Edited");
 
                             }
+                            
                         }
                         catch (Exception e)
                         {
@@ -121,11 +211,10 @@ namespace CustomersAPIClient
                     break;
             }
             NEVER_EAT_POISON_Disable_CertificateValidation();
-            GetSomeInfo();
            
             
         }
-
+        // Створення властивостей для отримання інформації з класу MainWindow(За допомогою Singlton Patern, тобто повертаю створений обект і користуюсь)
         #region Properties
         public string _greeting;
         public string _fname;
@@ -297,6 +386,21 @@ namespace CustomersAPIClient
             }
 
         }
+        private int _re;
+        public int NewWind
+        {
+            get => _re;
+
+            set
+            {
+                if (!SetValue(ref _re, value)) return;
+
+                _re = value;
+                OnPropertyChanged(nameof(NewWind));
+
+            }
+
+        }
         private RelayCommand saveCommand;
         public RelayCommand SaveCommand
         {
@@ -308,8 +412,107 @@ namespace CustomersAPIClient
 
                       try
                       {
-                         
+                          MessageBox.Show("Не доробив))");
+
                       }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
+
+        private RelayCommand openContactCommand;
+        public RelayCommand OpenContactCommand
+        {
+            get
+            {
+                return openContactCommand ??
+                  (openContactCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          string name= "";
+                          personS.NewWind = 1;
+                          var u = new MainViewModel(new WindowService(), name);
+                          OnPropertyChanged(nameof(NewWind));
+                          foreach (var item in SelectedConttacts)
+                          {
+                              foreach (var item1 in SelectedDataSource)
+                              {
+
+                              }
+                          }
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
+
+        private RelayCommand editContactCommand;
+        public RelayCommand EditContactCommand
+        {
+            get
+            {
+                return editContactCommand ??
+                  (editContactCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          string name = "";
+                          personS.NewWind = 2;
+                          
+                          var u = new MainViewModel(new WindowService(), name);
+                          OnPropertyChanged(nameof(EditContactCommand));
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
+
+        private RelayCommand deleteContactCommand;
+        public RelayCommand DeleteContactCommand
+        {
+            get
+            {
+                return deleteContactCommand ??
+                  (deleteContactCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          //foreach (var item in SelectedConttacts)
+                          //{
+                          //    PersonContact per = (PersonContact)item;
+                          //    HttpClient client = new HttpClient();
+                          //    client.BaseAddress = new Uri("https://localhost:5001");
+                          //    client.DefaultRequestHeaders.Accept.Add(
+                          //    new MediaTypeWithQualityHeaderValue("application/json"));
+                          //    HttpResponseMessage response = client.DeleteAsync("api/Person/" + per).Result;
+                          //    //HttpResponseMessage response = client.PutAsJsonAsync("api/Person/10000", per).Result;
+                          //    if (response.IsSuccessStatusCode)
+                          //    {
+
+                          //        MessageBox.Show("PersonContact was deleted");
+                          //    }
+                          //    else
+                          //    {
+                          //        MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
+                          //    }
+                          //}
+                          //OnPropertyChanged(nameof(DeleteContactCommand));
+                          MessageBox.Show("Не встиг доробити(((");
+                      }
+
                       catch (Exception e)
                       {
                           MessageBox.Show(e.Message);
@@ -388,17 +591,30 @@ namespace CustomersAPIClient
             }
             else
             {
-                Greeting = "";
+                Greeting = ""; 
             }
+            if (personS.SelectedPers.CountryCode != null)
+            {
+                foreach (var item in Countries)
+                {
+                    if(item.Code == personS.SelectedPers.CountryCode)
+                    {
+                        GetCode =item;
 
+                    }
+                }
+            }
+            else
+            {
+               
+            }
             if (personS.SelectedPers.CountryCode != "")
             {
                 countryCode = personS.SelectedPers.CountryCode;
             }
             else
             {
-                Greeting = "";
-                countryCode = "";
+                personS.SelectedPers.CountryCode = countryCode;
             }
 
             if (personS.SelectedPers.City != null)
@@ -440,7 +656,7 @@ namespace CustomersAPIClient
             {
                 Title = "";
             }
-
+            personS.SelectedPers.FirstContact = DateTime.Now;
             if (personS.SelectedPers.Zip != null)
             {
                 Postcode = personS.SelectedPers.Zip;
@@ -478,9 +694,11 @@ namespace CustomersAPIClient
                 }
             }
 
+
             #endregion
 
         }
+        // Функція для отримання коду країни.
         public void GetCoutryCode(string h)
         {
             foreach (var item in Countries)
@@ -509,7 +727,7 @@ namespace CustomersAPIClient
 
             }
         }
-
+        // Запит на отримання списку країн 
         public void GetSomeInfo()
         {
             HttpClient client = new HttpClient();
@@ -576,7 +794,7 @@ namespace CustomersAPIClient
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
-
+        // Запит на додавання персона
         static async Task<Uri> AddPersonAsync(Person person)
         {
             HttpClient client = new HttpClient();
@@ -593,6 +811,8 @@ namespace CustomersAPIClient
             return response.Headers.Location;
 
         }
+        // Запит на змінення персона
+
         static async Task<Uri> EditPersonAsync(Person person)
         {
             HttpClient client = new HttpClient();
@@ -607,17 +827,7 @@ namespace CustomersAPIClient
             response.EnsureSuccessStatusCode();
 
             return response.Headers.Location;
-            //HttpClient client = new HttpClient();
-            //client.BaseAddress = new Uri("https://localhost:5001/");
-
-
-            //HttpResponseMessage response = client.PutAsJsonAsync("api/person", p).Result;
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    MessageBox.Show("User Edited");
-            //}
-            //else
-            //    MessageBox.Show("Error");
+            
         }
         static async Task<Uri> AddContactAsync( PersonContact persContact)
         {

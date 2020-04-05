@@ -18,6 +18,7 @@ using System.Windows.Data;
 using FastDeepCloner;
 using RestSharp;
 using Microsoft.VisualStudio.PlatformUI;
+using CustomersAPIClient.ViewModels;
 
 namespace CustomersAPIClient
 {
@@ -36,9 +37,12 @@ namespace CustomersAPIClient
 
         private readonly IWindowService _windowService;
         public ICommand AddProfile { get; }
-        public List<string> LanguagesCombobox { get; set; } = new List<string>() { "EN", "FR", "DE", "IT" }; 
+        // створюю ліст з мов, зоб потім отримати селект з них
+        public List<string> LanguagesCombobox { get; set; } = new List<string>() { "EN", "FR", "DE", "IT" };
+        public List<Person> TestSelektedL  = new List<Person>() ;
         public ObservableCollection<string> SelectedDataSources { get; set; }
         public ObservableCollection<Person> _filtredpersons;
+        // створюю проміжну колекцію персонів для пошук, тощо
         public ObservableCollection<Person> FiltredPersons
         {
             get => _filtredpersons;
@@ -50,142 +54,7 @@ namespace CustomersAPIClient
         }
 
         private string _searchData;
-
-      
-        public string FastData
-        {
-            get => _searchData;
-
-            set
-            {
-                if (!SetValue(ref _searchData, value)) return;
-
-                _searchData = value;
-                OnPropertyChanged(nameof(FastData));
-                if(_searchData == "")
-                {
-                    foreach (var item in Persons)
-                    {
-                        FiltredPersons.Add(item);
-                    }
-                }
-                else
-                FastSearch();
-
-
-            }
-
-        }
-
-        private RelayCommand newCommand;
-        private RelayCommand delCommand;
-        private RelayCommand refCommand;
-        private RelayCommand editCommand;
-        public RelayCommand EditCommand
-        {
-            get
-            {
-                return editCommand ??
-                  (editCommand = new RelayCommand(obj =>
-                  {
-
-                      try
-                      {
-                          view.windowType = 2;
-                          view.SelectedPers = SelectePerson;
-                          _windowService.OpenProfileWindow(new NewEditViewModel());
-                      }
-                      catch (Exception e)
-                      {
-                          MessageBox.Show(e.Message);
-                      }
-                  }));
-            }
-        }
-        public RelayCommand NewCommand
-        {
-            get
-            {
-                return newCommand ??
-                  (newCommand = new RelayCommand(obj =>
-                  {
-
-                      try
-                      {
-                          view.windowType = 1;
-                          _windowService.OpenProfileWindow(new NewEditViewModel());
-                      }
-                      catch (Exception e)
-                      {
-                          MessageBox.Show(e.Message);
-                      }
-
-                  }));
-            }
-        }
-        public RelayCommand DelCommand
-        {
-            get
-            {
-                return delCommand ??
-                  (delCommand = new RelayCommand(obj =>
-                  {
-
-                      try
-                      {
-                          foreach (var item in TestSelected)
-                          {
-                              Person per = (Person)item;
-                              HttpClient client = new HttpClient();
-                              client.BaseAddress = new Uri("https://localhost:5001");
-                              client.DefaultRequestHeaders.Accept.Add(
-                              new MediaTypeWithQualityHeaderValue("application/json"));
-                              HttpResponseMessage response = client.DeleteAsync("api/Person/" + per.Id).Result;
-                              //HttpResponseMessage response = client.PutAsJsonAsync("api/Person/10000", per).Result;
-                              if (response.IsSuccessStatusCode)
-                              {
-                                  FiltredPersons.Remove(per); 
-                                 
-                                  OnPropertyChanged("sd");
-                                  MessageBox.Show("Person was deleted");
-                              }
-                              else
-                              {
-                                  MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
-                              }
-                          }
-
-                      }
-                      catch (Exception e)
-                      {
-                          MessageBox.Show(e.Message);
-                      }
-                  }));
-            }
-        }
-        public RelayCommand RefCommand
-        {
-            get
-            {
-                return refCommand ??
-                  (refCommand = new RelayCommand(obj =>
-                  {
-
-                      try
-                      {
-                          GetAll();
-                          OnPropertyChanged("Refresh");
-                          Refresh();
-                          MessageBox.Show("Refreshed");
-                          
-                      }
-                      catch (Exception e)
-                      {
-                          MessageBox.Show(e.Message);
-                      }
-                  }));
-            }
-        }
+        // Функція для швидкого пошуку (Робить пошук на строні сервера, як було написано у завданні)
         public void FastSearch()
         {
             FiltredPersons.Clear();
@@ -205,12 +74,12 @@ namespace CustomersAPIClient
                     {
                         FiltredPersons.Add(item);
                         foreach (var item1 in item.PersonContacts)
-                    {
-                        if (item1.PersonContactId == 1 && item1.ContactTypeId == 1)
                         {
-                            item.Test = item1.Txt;
+                            if (item1.PersonContactId == 1 && item1.ContactTypeId == 1)
+                            {
+                                item.Test = item1.Txt;
+                            }
                         }
-                    }
                     }
                     DataSourceFilter();
                     OnPropertyChanged("sd");
@@ -223,6 +92,165 @@ namespace CustomersAPIClient
             }
 
         }
+        public string FastData
+        {
+            get => _searchData;
+
+            set
+            {
+                if (!SetValue(ref _searchData, value)) return;
+
+                _searchData = value;
+                OnPropertyChanged(nameof(FastData));
+                if(_searchData == "")
+                {
+                    FiltredPersons.Clear(); 
+                    foreach (var item in Persons)
+                    {
+                        FiltredPersons.Add(item);
+                    }
+                }
+                else
+                FastSearch();
+
+
+            }
+
+        }
+        // команди для виконання дій
+        private RelayCommand newCommand;
+        private RelayCommand delCommand;
+        private RelayCommand refCommand;
+        private RelayCommand editCommand;
+        public RelayCommand EditCommand
+        {
+            get
+            {
+                return editCommand ??
+                  (editCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          view.windowType = 2;
+                          view.SelectedPers = SelectePerson;
+                          view1.SelectedPers = SelectePerson;
+                          _windowService.OpenProfileWindow(new NewEditViewModel(view.windowType));
+                          if (view.NewWind == 1)
+                          {
+                              _windowService.OpenProfileWindow2(new ContactNewEditModel());
+                          }
+
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
+        public RelayCommand NewCommand
+        {
+            get
+            {
+                return newCommand ??
+                  (newCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          view.windowType = 1;
+                          view1.SelectedPers = SelectePerson;
+
+                          _windowService.OpenProfileWindow(new NewEditViewModel( view.windowType));
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+
+                  }));
+            }
+        }
+        public RelayCommand DelCommand
+        {
+            get
+            {
+                return delCommand ??
+                  (delCommand = new RelayCommand(obj =>
+                  {
+
+                      try
+                      {
+                          foreach (var item3 in TestSelected)
+                          {
+                              Person per3 = (Person)item3;
+
+                              TestSelektedL.Add(per3);
+                          }
+                          foreach (var item in TestSelected)
+                          {
+                              Person per = (Person)item;
+                              HttpClient client = new HttpClient();
+                              client.BaseAddress = new Uri("https://localhost:5001");
+                              client.DefaultRequestHeaders.Accept.Add(
+                              new MediaTypeWithQualityHeaderValue("application/json"));
+                              HttpResponseMessage response = client.DeleteAsync("api/Person/" + per.Id).Result;
+                              if (response.IsSuccessStatusCode)
+                              {
+                                
+                                 
+                                  OnPropertyChanged("sd");
+                                  
+                              }
+                              else
+                              {
+                                  MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
+                              }
+                              
+                          }
+                          foreach (var item1 in TestSelektedL.ToList())
+                          {
+                              Person per1 = (Person)item1;
+
+                              FiltredPersons.Remove(per1);
+                              Persons.Remove(per1);
+                          }
+                          MessageBox.Show("Person was deleted");
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
+        public RelayCommand RefCommand
+        {
+            get
+            {
+                return refCommand ??
+                  (refCommand = new RelayCommand(obj =>
+                  {
+
+                  try
+                  {
+                      MessageBox.Show("Please wait, data is refreshing");
+                          FiltredPersons.Clear();
+                          GetAll();
+                          OnPropertyChanged("Refresh");
+                          //Refresh();
+                          MessageBox.Show("Data was refreshed");
+                          
+                      }
+                      catch (Exception e)
+                      {
+                          MessageBox.Show(e.Message);
+                      }
+                  }));
+            }
+        }
+        // отримання основного списку персонів
         private void GetAll()
         {
             HttpClient client = new HttpClient();
@@ -232,9 +260,8 @@ namespace CustomersAPIClient
                 new MediaTypeWithQualityHeaderValue("application/json"));
 
             HttpResponseMessage response = client.GetAsync("api/person/").Result;
-            HttpResponseMessage response2 = client.GetAsync("api/Contacts/").Result;
 
-            if (response.IsSuccessStatusCode && response2.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode )
             {
                 var persons = response.Content.ReadAsAsync<IEnumerable<Person>>().Result;
                 foreach (var item in persons)
@@ -262,7 +289,9 @@ namespace CustomersAPIClient
                 };
         }
         NewEditViewModel view = NewEditViewModel.getInstance("da");
+        ContactNewEditModel view1 = ContactNewEditModel.getInstance("da");
 
+        
         public MainViewModel(IWindowService windowService)
         {
             
@@ -285,10 +314,44 @@ namespace CustomersAPIClient
                     }
                     }
             }
-                _windowService = windowService;
-           
+            _windowService = windowService;
+            NewWind = view.NewWind;
+            if (view.NewWind == 1)
+            {
+                _windowService.OpenProfileWindow2(new ContactNewEditModel());
+            }
+            
+            
+
+
         }
-      
+        
+       public MainViewModel(IWindowService windowService, string name)
+        {
+                view1.NewWind = view.NewWind;
+                _windowService = windowService;
+                _windowService.OpenProfileWindow2(new ContactNewEditModel());
+            
+        }
+
+        private int _re;
+        public int NewWind
+        {
+            get => _re;
+
+            set
+            {
+                if (!SetValue(ref _re, value)) return;
+
+                _re = value;
+                OnPropertyChanged(nameof(NewWind));
+                if (view.NewWind == 1)
+                {
+                    _windowService.OpenProfileWindow2(new ContactNewEditModel());
+                }
+            }
+
+        }
         public void GenerateId()
         {
             int i = 0;
@@ -440,6 +503,10 @@ namespace CustomersAPIClient
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            if (view.NewWind == 1)
+            {
+                _windowService.OpenProfileWindow2(new ContactNewEditModel());
+            }
         }
 
         public virtual bool SetValue<T>(ref T field, T newValue)
@@ -485,9 +552,9 @@ namespace CustomersAPIClient
             }
              
         }
-        
-        
-       
+
+
+
     }
 
 }

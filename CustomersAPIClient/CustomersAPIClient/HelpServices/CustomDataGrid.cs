@@ -11,6 +11,7 @@ namespace CustomersAPIClient
 {
     class CustomDataGrid : DataGrid
     {
+        // клас для створення кастомного грида для головного вікна
         public CustomDataGrid()
         {
             this.SelectionChanged += CustomDataGrid_SelectionChanged;
