@@ -70,7 +70,7 @@
             </TextBox.Style>
         </TextBox>
 
-        <Label Content="Customers" 
+        <Label Content="Pacients" 
                Grid.Row="0" 
                HorizontalAlignment="Left" 
                VerticalAlignment="Top" />

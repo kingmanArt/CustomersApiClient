@@ -503,10 +503,7 @@ namespace CustomersAPIClient
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
-            if (view.NewWind == 1)
-            {
-                _windowService.OpenProfileWindow2(new ContactNewEditModel());
-            }
+           
         }
 
         public virtual bool SetValue<T>(ref T field, T newValue)
